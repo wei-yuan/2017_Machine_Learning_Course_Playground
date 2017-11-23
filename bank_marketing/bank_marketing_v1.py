@@ -26,47 +26,83 @@ print (data.columns.tolist())
 
 def numericalType_(data):    
     #data.deposit.replace(('yes', 'no'), (1, 0), inplace=True)
+    data.job.replace(('admin.','blue-collar','entrepreneur','housemaid','management','retired',
+                    'self-employed','services','student','technician','unemployed','unknown'),
+                    (0,1,2,3,4,5,6,7,8,9,10,11),
+                    inplace=True)
     data.default.replace(('yes','no','unknown'),(1,0,2),inplace=True)
     data.housing.replace(('yes','no'),(1,0),inplace=True)
     data.loan.replace(('yes','no'),(1,0),inplace=True)
     data.marital.replace(('married','single','divorced'),(1,2,3),inplace=True)
     data.contact.replace(('telephone','cellular','unknown'),(1,2,3),inplace=True)
     data.month.replace(('jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'),(1,2,3,4,5,6,7,8,9,10,11,12),inplace=True)
-    data.education.replace(('primary','secondary','tertiary','unknown'),(1,2,3,4),inplace=True)
-    
+    data.education.replace(('primary','secondary','tertiary','unknown'),(1,2,3,4),inplace=True)    
     return data
 
+# apply numerical type to original data
 data = numericalType_(data)
 
-plt.subplot(5,3,1)
+# show data distribution
+plt.figure(1)
+
+ax = plt.subplot(4,2,1)
+ax.set_title("Age")
 plt.hist((data.age), bins=100)
-plt.subplot(5,3,2)
-plt.hist((data.job), bins=20)
-plt.subplot(5,3,3)
-plt.hist((data.marital), bins=10)
-plt.subplot(5,3,4)
+
+ax = plt.subplot(4,2,2)
+ax.set_title("job")
+plt.hist((data.job), bins=12)
+
+ax = plt.subplot(4,2,3)
+ax.set_title("marital")
+plt.hist((data.marital), bins=3)
+
+ax = plt.subplot(4,2,4)
+ax.set_title("education")
 plt.hist((data.education), bins=10)
-plt.subplot(5,3,5)
+
+ax = plt.subplot(4,2,5)
+ax.set_title("default")
 plt.hist((data.default), bins=3)
-plt.subplot(5,3,6)
-plt.hist((data.balance), bins=10000)
-plt.subplot(5,3,7)
+
+ax = plt.subplot(4,2,6)
+ax.set_title("housing")
 plt.hist((data.housing), bins=2)
-plt.subplot(5,3,8)
+
+ax = plt.subplot(4,2,7)
+ax.set_title("loan")
 plt.hist((data.loan), bins=2)
-plt.subplot(5,3,9)
+
+plt.figure(2)
+ax.set_title("balance")
+plt.hist((data.balance), bins=1000)
+
+plt.figure(3)
+
+ax = plt.subplot(3,2,1)
+ax.set_title("contact")
 plt.hist((data.contact), bins=3)
-plt.subplot(5,3,10)
+
+ax = plt.subplot(3,2,2)
+ax.set_title("month")
 plt.hist((data.month), bins=12)
-plt.subplot(5,3,11)
+
+ax = plt.subplot(3,2,3)
+ax.set_title("duration")
 plt.hist((data.duration), bins=100)
-plt.subplot(5,3,12)
+
+ax = plt.subplot(3,2,4)
+ax.set_title("campaign")
 plt.hist((data.campaign), bins=10)
-plt.subplot(5,3,13)
+
+ax = plt.subplot(3,2,5)
+ax.set_title("pdays")
 plt.hist((data.pdays), bins=1000)
-plt.subplot(5,3,14)
+
+ax = plt.subplot(3,2,6)
+ax.set_title("previous")
 plt.hist((data.previous), bins=100)
-plt.subplot(5,3,15)
-plt.hist((data.y), bins=2)
+
 plt.show()
+
 
