@@ -7,6 +7,7 @@ import graphviz
 # Model
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
+from sklearn import tree
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, GradientBoostingClassifier
 from sklearn.naive_bayes import GaussianNB
@@ -75,6 +76,18 @@ log_entry = pd.DataFrame([["Decision Tree",accuracy,precision,recall,f1_score,ro
 log = log.append(log_entry)
 
 print(log)
+
+# Show decision tree for bank data set
+'''
+dot_data = tree.export_graphviz(clf, out_file=None, 
+                                feature_names=data_X.columns.tolist(),  
+                                class_names=None,  
+                                filled=True, rounded=True,
+                                special_characters=True)
+graph = graphviz.Source(dot_data) 
+graph.render("Bank Marketing") 
+graph
+'''
 
 '''
 # show data distribution
