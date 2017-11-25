@@ -47,47 +47,61 @@ data = numericalType_(data)
 # prepare X, Y axis term
 data_X = data.drop(['day','poutcome','y'], axis=1)
 data_Y = data['y']
-print ("Original Data Column: %s" % data.columns.tolist(), "After dropped Data Column: %s" % data_X.columns.tolist())
+print ("Original Data Column: %s" % data.columns.tolist(), "\nAfter dropped Data Column: %s" % data_X.columns.tolist())
+
+avg_accuracy = 0
 
 for i in range(0, 10):
+    print "\ni : %d" % i
     # Shuffle data
-    rs = StratifiedShuffleSplit(n_splits=10, test_size=0.1,random_state=0)
-    rs.get_n_splits(data_X, data_Y)
-    print ("Original Data Column: %s" % data_X, "Original Data Column: %s" % data_Y)
-    '''
-    for train_index, test_index in rs.split(data_X,data_y):
+    rs = ShuffleSplit(n_splits=10, test_size=0.1,random_state=0)
+    rs.get_n_splits(data_X, data_Y)    
 
+    iter_avg_accuracy = 0    
+
+    for train_index, test_index in rs.split(data_X,data_Y):        
         # split data set into train and test
         # If float, should be between 0.0 and 1.0 and represent the proportion of the dataset to include in the test split
-        train_X, test_X, train_y, test_y = train_test_split(data_X, data_Y, test_size = 0.2)
+        #train_X, test_X, train_Y, test_Y = train_test_split(data_X, data_Y, test_size = 0.2)
         
-        X,X_test = data_X.iloc[train_index], data_X.iloc[test_index]
-        y,y_test = data_y.iloc[train_index], data_y.iloc[test_index]    
-
+        train_X, test_X = data_X.iloc[train_index], data_X.iloc[test_index]
+        train_Y, test_Y = data_Y.iloc[train_index], data_Y.iloc[test_index]    
+        
         # Build classifier, Decision Tree Classifier
         clf = DecisionTreeClassifier()
-        bank_clf = clf.fit(train_X, train_y)
+        bank_clf = clf.fit(train_X, train_Y)
 
         # Predict 
-        test_y_predicted = bank_clf.predict(test_X)
+        test_Y_predicted = bank_clf.predict(test_X)
 
         # Validation Metric
-        accuracy = m.accuracy_score(test_y, test_y_predicted) 
+        accuracy = m.accuracy_score(test_Y, test_Y_predicted) 
+        '''
         precision = m.precision_score(test_y,test_y_predicted,average='macro')
         recall = m.recall_score(test_y,test_y_predicted,average='macro')
         f1_score = m.f1_score(test_y,test_y_predicted,average='macro')
         roc_auc = roc_auc_score(test_y, test_y_predicted)
+        '''
 
         # Print using string formatting
         classifiers = {'Decision Tree':DecisionTreeClassifier()}
-        log_cols = ["Classifier", "Accuracy","Precision Score","Recall Score","F1-Score","roc-auc_Score"]
+        #log_cols = ["Classifier", "Accuracy","Precision Score","Recall Score","F1-Score","roc-auc_Score"]
+        log_cols = ["Classifier", "Accuracy"]
         log = pd.DataFrame(columns=log_cols)
-        log_entry = pd.DataFrame([["Decision Tree",accuracy,precision,recall,f1_score,roc_auc]], columns=log_cols)
+        #log_entry = pd.DataFrame([["Decision Tree",accuracy,precision,recall,f1_score,roc_auc]], columns=log_cols)
+        log_entry = pd.DataFrame([["Decision Tree",accuracy]], columns=log_cols)
         log = log.append(log_entry)    
 
-        print(log)
-    #avg_accuracy = 
-    '''
+        iter_avg_accuracy += accuracy
+                        
+        #print(log)    
+    iter_avg_accuracy /= 10    
+    print "\niter_avg_accuracy: ", iter_avg_accuracy
+
+    avg_accuracy += iter_avg_accuracy
+
+avg_accuracy /= 10
+print "\navg_accuracy: ", avg_accuracy
     
 
 # Show decision tree for bank data set
