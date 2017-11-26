@@ -26,27 +26,37 @@ data = pd.read_csv('bank/bank.csv', sep=';',header='infer')
 
 def numericalType_(data):    
     # input feature
-    data.job.replace(('admin.','blue-collar','entrepreneur','housemaid','management','retired',
-                    'self-employed','services','student','technician','unemployed','unknown'),
-                    (0,1,2,3,4,5,6,7,8,9,10,11),
-                    inplace=True)
-    data.default.replace(('yes','no','unknown'),(1,0,2),inplace=True)
-    data.housing.replace(('yes','no'),(1,0),inplace=True)
-    data.loan.replace(('yes','no'),(1,0),inplace=True)
-    data.marital.replace(('married','single','divorced'),(1,2,3),inplace=True)
-    data.contact.replace(('telephone','cellular','unknown'),(1,2,3),inplace=True)
-    data.month.replace(('jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'),(1,2,3,4,5,6,7,8,9,10,11,12),inplace=True)
-    data.education.replace(('primary','secondary','tertiary','unknown'),(1,2,3,4),inplace=True)    
+    if(data.job is not None):
+        data.job.replace(('admin.','blue-collar','entrepreneur','housemaid','management','retired',
+                        'self-employed','services','student','technician','unemployed','unknown'),
+                        (0,1,2,3,4,5,6,7,8,9,10,11),
+                        inplace=True)
+    if(data.marital is not None):                        
+        data.marital.replace(('married','single','divorced'),(1,2,3),inplace=True)
+    if(data.education is not None):                        
+        data.education.replace(('primary','secondary','tertiary','unknown'),(1,2,3,4),inplace=True)    
+    if(data.default is not None):                        
+        data.default.replace(('yes','no','unknown'),(1,0,2),inplace=True)
+    if(data.housing is not None):                        
+        data.housing.replace(('yes','no'),(1,0),inplace=True)
+    if(data.loan is not None):                        
+        data.loan.replace(('yes','no'),(1,0),inplace=True)
+    if(data.contact is not None):    
+        data.contact.replace(('telephone','cellular','unknown'),(1,2,3),inplace=True)
+    if(data.month is not None):    
+        data.month.replace(('jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'),(1,2,3,4,5,6,7,8,9,10,11,12),inplace=True)        
     # output label
     data.y.replace(('yes','no'),(1,0),inplace=True)
+    
     return data
 
 # apply numerical type to original data for non decision tree classifier
 data = numericalType_(data)
 
 # prepare X, Y axis term
-data_X = data.drop(['day','poutcome','y'], axis=1)
-data_Y = data['y']
+#data_X = data.drop(['day','poutcome','y'], axis=1)
+data_X = data[['age', 'job', 'marital', 'education', 'balance', 'housing', 'loan']]
+data_Y = data[['y']]
 print ("Original Data Column: %s" % data.columns.tolist(), "\nAfter dropped Data Column: %s" % data_X.columns.tolist())
 
 avg_accuracy = 0
@@ -76,25 +86,23 @@ for i in range(0, 10):
 
         # Validation Metric
         accuracy = m.accuracy_score(test_Y, test_Y_predicted) 
-        '''
-        precision = m.precision_score(test_y,test_y_predicted,average='macro')
-        recall = m.recall_score(test_y,test_y_predicted,average='macro')
-        f1_score = m.f1_score(test_y,test_y_predicted,average='macro')
-        roc_auc = roc_auc_score(test_y, test_y_predicted)
-        '''
+        precision = m.precision_score(test_Y,test_Y_predicted,average='macro')
+        recall = m.recall_score(test_Y,test_Y_predicted,average='macro')
+        f1_score = m.f1_score(test_Y,test_Y_predicted,average='macro')
+        roc_auc = roc_auc_score(test_Y, test_Y_predicted)
 
         # Print using string formatting
         classifiers = {'Decision Tree':DecisionTreeClassifier()}
-        #log_cols = ["Classifier", "Accuracy","Precision Score","Recall Score","F1-Score","roc-auc_Score"]
-        log_cols = ["Classifier", "Accuracy"]
+        log_cols = ["Classifier", "Accuracy","Precision Score","Recall Score","F1-Score","roc-auc_Score"]
+        #log_cols = ["Classifier", "Accuracy"]
         log = pd.DataFrame(columns=log_cols)
-        #log_entry = pd.DataFrame([["Decision Tree",accuracy,precision,recall,f1_score,roc_auc]], columns=log_cols)
-        log_entry = pd.DataFrame([["Decision Tree",accuracy]], columns=log_cols)
+        log_entry = pd.DataFrame([["Decision Tree",accuracy,precision,recall,f1_score,roc_auc]], columns=log_cols)
+        #log_entry = pd.DataFrame([["Decision Tree",accuracy]], columns=log_cols)
         log = log.append(log_entry)    
 
         iter_avg_accuracy += accuracy
                         
-        #print(log)    
+        print(log)
     iter_avg_accuracy /= 10    
     print "\niter_avg_accuracy: ", iter_avg_accuracy
 
