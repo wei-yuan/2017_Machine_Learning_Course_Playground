@@ -22,7 +22,7 @@ from sklearn.metrics import roc_auc_score
 from sklearn.metrics import accuracy_score
 
 # Read data set
-data = pd.read_csv('bank_additional/bank-additional-full.csv', sep=';',header='infer')
+data = pd.read_csv('bank-additional/bank-additional-full.csv', sep=';',header='infer')
 
 # duration should be discarded if the intention is to have a realistic predictive model
 def numericalType_(data):    
@@ -62,7 +62,7 @@ print ("Original Data Column: %s" % data.columns.tolist(), "\nAfter dropped Data
 
 avg_accuracy = 0
 
-for i in range(0, 10):
+for i in range(0, 2): # 10
     print "\ni : %d" % i
     # Shuffle data
     rs = ShuffleSplit(n_splits=10, test_size=0.1,random_state=0)
