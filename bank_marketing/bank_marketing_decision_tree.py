@@ -35,7 +35,9 @@ def numericalType_(data):
     if(data.marital is not None):                        
         data.marital.replace(('married','single','divorced'),(1,2,3),inplace=True)
     if(data.education is not None):                        
-        data.education.replace(('primary','secondary','tertiary','unknown'),(1,2,3,4),inplace=True)    
+        #data.education.replace(('primary','secondary','tertiary','unknown'),(1,2,3,4),inplace=True)    
+        data.preprocessing.OneHotEncoder(n_values=’auto’, categorical_features=’all’,
+                                            dtype='class', handle_unknown ='error')
     if(data.default is not None):                        
         data.default.replace(('yes','no','unknown'),(1,0,2),inplace=True)
     if(data.housing is not None):                        
@@ -56,7 +58,8 @@ data = numericalType_(data)
 
 # prepare X, Y axis term
 #data_X = data.drop(['day','poutcome','y'], axis=1)
-data_X = data[['age', 'job', 'marital', 'education', 'default', 'balance', 'housing', 'loan', ]]
+# 'balance' is not in bank-additional-full.csv
+data_X = data[['age', 'job', 'marital', 'education', 'default', 'housing', 'loan']]
 data_Y = data[['y']]
 print ("Original Data Column: %s" % data.columns.tolist(), "\nAfter dropped Data Column: %s" % data_X.columns.tolist())
 
