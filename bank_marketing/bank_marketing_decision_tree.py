@@ -4,6 +4,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import graphviz
+
+# Data preprocessor
+from sklearn import preprocessing
 # Model
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
@@ -24,7 +27,15 @@ from sklearn.metrics import accuracy_score
 # Read data set
 data = pd.read_csv('bank-additional/bank-additional-full.csv', sep=';',header='infer')
 
-# duration should be discarded if the intention is to have a realistic predictive model
+# Data cleaning without hand-crafted
+# encode labels with value between 0 and n_classes-1.
+le = preprocessing.LabelEncoder()
+new_data_education = data.apply(le.fit_transform)
+
+print new_data_education
+
+'''
+# ...duration should be discarded if the intention is to have a realistic predictive model
 def numericalType_(data):    
     # input feature
     if(data.job is not None):
@@ -36,8 +47,6 @@ def numericalType_(data):
         data.marital.replace(('married','single','divorced'),(1,2,3),inplace=True)
     if(data.education is not None):                        
         #data.education.replace(('primary','secondary','tertiary','unknown'),(1,2,3,4),inplace=True)    
-        data.preprocessing.OneHotEncoder(n_values=’auto’, categorical_features=’all’,
-                                            dtype='class', handle_unknown ='error')
     if(data.default is not None):                        
         data.default.replace(('yes','no','unknown'),(1,0,2),inplace=True)
     if(data.housing is not None):                        
@@ -114,7 +123,7 @@ for i in range(0, 2): # 10
 
 avg_accuracy /= 10
 print "\navg_accuracy: ", avg_accuracy
-    
+'''    
 
 # Show decision tree for bank data set
 '''
