@@ -49,11 +49,12 @@ def id_prep(dataset):
 def time_prep(dataset):
 	unix_timestamp = dataset.TIMESTAMP.astype('float32')
 
+	print("index, element, utc_time")
 	for index, element in enumerate(unix_timestamp):
 		utc_time = datetime.utcfromtimestamp(element)
-		print("index, element, utc_time = %s, %s, %s" % (index, element, utc_time))
-		#print ",unix_timestamp = %d" %  unix_timestamp[i]
-		#print(utc_time.strftime("%Y-%m-%d %H:%M:%S.%f+00:00 (UTC)"))
+		#print("%s, %s, %s" % (index, element, utc_time))
+		#unix_timestamp[index] = utc_time
+		unix_timestamp[index] = int(str(utc_time)[11:13])
 
 # POLYLINE
 def poly_prep(dataset):
