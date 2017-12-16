@@ -14,18 +14,24 @@ df = pd.read_csv('mini_sample.csv',
 df_reorder = df[['TIMESTAMP', 'CALL_TYPE', 'TAXI_ID', 'POLYLINE']] 
 
 # TIMESTAMP
-def time_prep(dataset):	
+def time_prep(dataset):
+    time = dataset.TIMESTAMP.astype('float32')
+    le = preprocessing.LabelEncoder()
+    le.fit(time)
+    label_time = le.transform(time)
+    max_time = max(label_time).astype('float32')   
     # change timestamp from unix timestamp to hour
-    for index, element in enumerate(df_reorder.TIMESTAMP.astype('float32')):                        
+    for index, element in enumerate(time):        
         utc_time = datetime.utcfromtimestamp(element)                
         #print ("index: %s, utc_time: %s" % (index, utc_time))
-        dataset.loc[index, 'TIMESTAMP'] = int(str(utc_time)[11:13])
+        dataset.loc[index, 'TIMESTAMP'] = int(str(utc_time)[11:13])/ max_time
 
 def call_prep(dataset):
     call_type = dataset.CALL_TYPE
     le = preprocessing.LabelEncoder()
     le.fit(call_type)
-    label_type = le.transform(call_type)    
+    label_type = le.transform(call_type)
+    #print label_type
     max_label = max(label_type).astype('float32')            
     for index, element in enumerate(label_type):                                        
         norm_label = label_type[index].astype('float32') / max_label
@@ -54,13 +60,22 @@ def poly_prep(dataset):
         print ("index: %s, mini_list: %s" % (index, mini_list))
         print "\n"    
         print ("num of point: %s" % len(eval(mini_list)))
-        '''
+        '''        
         dataset.loc[index, 'POLYLINE'] = len(eval(mini_list))
         '''
         for index, point in enumerate(eval(mini_list)):                        			
             #print ("index: %s, point: %s" % (index, point))
             #print "\n"
         '''
+    # import new POLYLINE
+    point_num = dataset.POLYLINE
+    le = preprocessing.LabelEncoder()
+    le.fit(point_num)
+    label_point_num = le.transform(point_num)
+    max_point_num = max(point_num.astype('float32'))
+    print ("max_point_num: %s" % max_point_num)   
+    for index, num_point in enumerate(point_num):
+        dataset.loc[index, 'POLYLINE'] = num_point / max_point_num
 
 time_prep(df_reorder)
 id_prep(df_reorder)
