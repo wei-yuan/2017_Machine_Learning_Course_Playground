@@ -29,40 +29,7 @@ from sklearn.metrics import mean_squared_error
 #---- Load dataset ----#
 ########################
 from pandas import read_csv
-dataset = read_csv('sample.csv')
+dataset = read_csv('reordered.csv')
 values  = dataset.values
-dataset = dataset.astype('float32')
 
-########################
-#-- data preprocessing-#
-########################
-# TAXI_ID
-def id_prep(dataset):
-	taxi_id = dataset.TAXI_ID
-	le = preprocessing.LabelEncoder()
-	le.fit(taxi_id)
-	label_taxi_id = le.transform(taxi_id)
-	max_id = max(label_taxi_id)
-	norm_taxi_id = label_taxi_id.astype('float32') / max_id
-
-# TIMESTAMP
-def time_prep(dataset):
-	unix_timestamp = dataset.TIMESTAMP.astype('float32')
-
-	print("index, element, utc_time")
-	for index, element in enumerate(unix_timestamp):
-		utc_time = datetime.utcfromtimestamp(element)
-		#print("%s, %s, %s" % (index, element, utc_time))
-		#unix_timestamp[index] = utc_time
-		unix_timestamp[index] = int(str(utc_time)[11:13])
-
-# POLYLINE
-def poly_prep(dataset):
-	poly = dataset.POLYLINE
-
-	for index, element in enumerate(poly):
-
-
-
-id_prep(dataset)
-time_prep(dataset)
+# data concatenation
