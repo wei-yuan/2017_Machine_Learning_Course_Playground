@@ -54,6 +54,7 @@ train_X = train_X.reshape((train_X.shape[0], n_hours, n_features))
 test_X = test_X.reshape((test_X.shape[0], n_hours, n_features))
 print(train_X.shape, train_y.shape, test_X.shape, test_y.shape)
 
+
 ########################
 #------- Model --------#
 ########################
