@@ -33,17 +33,14 @@ print (dataset.head(5))
 values  = dataset.values
 
 ########################
-#-Train / Test dataset-#
+#------- dataset ------#
 ########################
-# split into train and test sets
 n_data = len(dataset.index) # total number of data
 train_fields = ['HOUR', 'CALL_TYPE', 'TAXI_ID']
 train = read_csv('reordered.csv', usecols=train_fields)
 label_fields = ['POLYLINE']
 label = read_csv('reordered.csv', usecols=label_fields)
-# split into input and outputs
-#n_obs = n_data * n_features
-
+# split into train and test sets
 x_train, x_test, y_train, y_test = train_test_split(
 									train, 
 									label, 
@@ -62,7 +59,7 @@ regr.fit(x_train, y_train)
 # evaluate model
 y_pred = regr.predict(x_test)
 #diabetes_y_pred = regr.predict(diabetes_X_test)
-print ("accuracy: %.2f" % regr.score(x_test, y_test))
+print ("coefficient of determination R^2 of the prediction: %.2f" % regr.score(x_test, y_test))
 print("Mean squared error: %.2f"
       % mean_squared_error(y_test, y_pred))
 
