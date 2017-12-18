@@ -24,7 +24,7 @@ def time_prep(dataset):
     for index, element in enumerate(time):        
         utc_time = datetime.utcfromtimestamp(element)                
         #print ("index: %s, utc_time: %s" % (index, utc_time))
-        dataset.loc[index, 'TIMESTAMP'] = int(str(utc_time)[11:13])/ max_time
+        dataset.loc[index, 'TIMESTAMP'] = int(str(utc_time)[11:13])#/ max_time
 
 def call_prep(dataset):
     call_type = dataset.CALL_TYPE
@@ -34,7 +34,7 @@ def call_prep(dataset):
     #print label_type
     max_label = max(label_type).astype('float32')            
     for index, element in enumerate(label_type):                                        
-        norm_label = label_type[index].astype('float32') / max_label
+        norm_label = label_type[index].astype('float32') #/ max_label
         dataset.loc[index, 'CALL_TYPE'] = norm_label
         #print (index, norm_label)        
 
@@ -47,7 +47,7 @@ def id_prep(dataset):
     label_taxi_id = le.transform(taxi_id)    
     max_id = max(label_taxi_id).astype('float32')
     for index, element in enumerate(label_taxi_id):                
-        norm_taxi_id = label_taxi_id[index].astype('float32') / max_id
+        norm_taxi_id = label_taxi_id[index].astype('float32') #/ max_id
         #print ("norm_taxi_id: %s" % norm_taxi_id)
         dataset.loc[index, 'TAXI_ID'] = norm_taxi_id        
 
@@ -75,7 +75,7 @@ def poly_prep(dataset):
     max_point_num = max(point_num.astype('float32'))
     print ("max_point_num: %s" % max_point_num)   
     for index, num_point in enumerate(point_num):
-        dataset.loc[index, 'POLYLINE'] = num_point / max_point_num
+        dataset.loc[index, 'POLYLINE'] = num_point #/ max_point_num
 
 time_prep(df_reorder)
 id_prep(df_reorder)
