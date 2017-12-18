@@ -1,3 +1,6 @@
+######################
+###### Library #######
+######################
 # dataset
 from keras.datasets import mnist
 # model
@@ -23,15 +26,13 @@ batch_size = 256
 ######################
 X_train = X_train.reshape(60000, 784)
 X_test = X_test.reshape(10000, 784)
-# convert to float
-X_train = X_train.astype('float32')
-X_test = X_test.astype('float32')
-# normalization
-X_train /= 255
-X_test /= 255
+# convert to float and normalization
+X_train = X_train.astype('float32') / 255
+X_test = X_test.astype('float32') / 255
 # change to category
 Y_Train = np_utils.to_categorical(y_train, nb_classes)
 Y_Test = np_utils.to_categorical(y_test, nb_classes)
+
 # plot
 def show_train_history(train_history, train, validation):
     plt.plot(train_history.history[train])
@@ -41,16 +42,15 @@ def show_train_history(train_history, train, validation):
     plt.xlabel('epoch')
     plt.legend(['train', 'validation'], loc='upper left')
     plt.show()
+
 ######################
 ####### Model ########
 ######################
 # Logistic regression model
 model = Sequential()
 model.add(Dense(output_dim=10, input_shape=(784,), init='normal', activation='softmax'))
-#model.compile(optimizer=SGD(lr=0.05), loss='categorical_crossentropy', metrics=['accuracy'])
-model.compile(optimizer='rmsprop',
-              loss='categorical_crossentropy',
-              metrics=['accuracy'])
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+#model.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['accuracy'])
 # check model
 model.summary()
 
