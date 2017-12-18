@@ -63,13 +63,16 @@ print ("coefficient of determination R^2 of the prediction: %.2f" % regr.score(x
 print("Mean squared error: %.2f"
       % mean_squared_error(y_test, y_pred))
 
-#scores = cross_val_score(clf, iris.data, iris.target, cv=5)
-
 '''
-model = Sequential()
-model.add(LSTM(50, input_shape=(train_X.shape[1], train_X.shape[2])))
-model.add(Dense(1))
-model.compile(loss='mae', optimizer='adam')
+# define wider model
+def wider_model():
+	# create model
+	model = Sequential()
+	model.add(Dense(20, input_dim=13, kernel_initializer='normal', activation='relu'))
+	model.add(Dense(1, kernel_initializer='normal'))
+	# Compile model
+	model.compile(loss='mean_squared_error', optimizer='adam')
+	return model
 # fit network
 history = model.fit(train_X, train_y, epochs=50, batch_size=72, validation_data=(test_X, test_y), verbose=2, shuffle=False)
 # plot history
