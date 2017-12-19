@@ -8,8 +8,8 @@ from sklearn import preprocessing
 ########################
 
 # read data
-df = pd.read_csv('mini_sample.csv', 
-                usecols=['CALL_TYPE', 'TAXI_ID', 'TIMESTAMP', 'POLYLINE'])
+df = pd.read_csv('sample.csv', 
+                usecols=['CALL_TYPE', 'TAXI_ID', 'TIMESTAMP', 'POLYLINE'])                  
 # rearrange column here
 df_reorder = df[['TIMESTAMP', 'CALL_TYPE', 'TAXI_ID', 'POLYLINE']] 
 
