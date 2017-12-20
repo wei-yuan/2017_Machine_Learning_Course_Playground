@@ -59,8 +59,8 @@ print (scaled_label)
 x_train, x_test, y_train, y_test = train_test_split(
 									scaled_train, 
 									scaled_label, 
-									test_size=0.2, 
-									random_state=2)
+									test_size=0.3, 
+									random_state=42)
 
 # reshape input to be 3D [samples, timesteps, features]
 x_train = x_train.reshape((x_train.shape[0], 1, x_train.shape[1]))
@@ -69,11 +69,14 @@ print(x_train.shape, y_train.shape, x_test.shape, y_test.shape)
 
 # design network
 model = Sequential()
-model.add(LSTM(1500, input_shape=(x_train.shape[1], x_train.shape[2])))
-model.add(Dense(1))
+model.add(LSTM(500, return_sequences = True, input_shape=(x_train.shape[1], x_train.shape[2])))
+#model.add(LSTM(500, return_sequences = True))
+model.add(LSTM(500))
+model.add(Dense(1)) # output node = 1
 model.compile(loss='mae', optimizer='adam')
+model.summary()
 # fit network
-history = model.fit(x_train, y_train, epochs=20, batch_size=256, validation_data=(x_test, y_test), verbose=2, shuffle=False)
+history = model.fit(x_train, y_train, epochs=20, batch_size=64, validation_data=(x_test, y_test), verbose=2, shuffle=False)
 
 # make a prediction
 yhat = model.predict(x_test)
