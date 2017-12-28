@@ -20,7 +20,7 @@ from sklearn.neural_network import MLPClassifier
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.layers import LSTM
-from keras.wrappers.scikit_learn import KerasRegressor
+from keras import optimizers
 
 # Validation tool
 from sklearn.model_selection import KFold
@@ -73,7 +73,10 @@ model.add(LSTM(500, return_sequences = True, input_shape=(x_train.shape[1], x_tr
 #model.add(LSTM(500, return_sequences = True))
 model.add(LSTM(500))
 model.add(Dense(1)) # output node = 1
-model.compile(loss='mae', optimizer='adam')
+#model.compile(loss='mae', optimizer='adam')
+# optimizers parameter to control gradient clipping
+sgd = optimizers.SGD(lr=1, clipvalue=0.5) # clipping, range from -0.5 ~ 0.5
+model.compile(loss='mse', optimizer=sgd)
 model.summary()
 # fit network
 history = model.fit(x_train, y_train, epochs=20, batch_size=64, validation_data=(x_test, y_test), verbose=2, shuffle=False)
