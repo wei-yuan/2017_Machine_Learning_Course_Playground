@@ -1,0 +1,2 @@
+# ignore data set in folder
+taxi_trip_time_prediction_(II)/data/*
