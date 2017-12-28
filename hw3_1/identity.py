@@ -99,7 +99,7 @@ show_train_history(train_history, 'acc', 'val_acc')
 show_train_history(train_history, 'loss', 'val_loss')
 
 scores = model.evaluate(x_Test_normalize, y_TestOneHot)
-print()
+print('loss', scores[0])
 print('accuracy', scores[1])
 
 # GPU memory release
